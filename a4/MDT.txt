@@ -1,0 +1,6 @@
+MDT Index  Instruction
+1          INCR &ARG1
+2          ADD AREG #1
+3          SUB BREG B
+4          MOVER AREG 10
+5          MEND

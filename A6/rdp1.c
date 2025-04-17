@@ -1,9 +1,18 @@
-#include<stdio.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
+// Global variables
 char str[100];
 int i = 0;
 char tp;
+
+// Function declarations (prototypes)
+void E();
+void EP();
+void T();
+void TP();
+void F();
 
 void advance() {
     i++;
@@ -21,6 +30,7 @@ void EP() {
         T();
         EP();
     }
+    // ε-production: if no +, do nothing
 }
 
 void T() {
@@ -34,49 +44,42 @@ void TP() {
         F();
         TP();
     }
+    // ε-production: if no *, do nothing
 }
 
 void F() {
-    if (tp == 'i' || tp == 'd') {
+    if (tp == 'i') {
         advance();
-    } else if (tp >= '0' && tp <= '9') {
+    } else if (tp == '(') {
         advance();
-    } else {
-        if (tp == '(') {
+        E();
+        if (tp == ')') {
             advance();
-            E();
-            if (tp == ')') {
-                advance();
-            } else {
-                printf("String not accepted: Missing closing parenthesis\n");
-                exit(1);
-            }
         } else {
-            printf("String not accepted: Invalid character\n");
+            printf("Error: Expected ')'\n");
             exit(1);
         }
+    } else {
+        printf("Error: Invalid symbol '%c'\n", tp);
+        exit(1);
     }
 }
 
 int main() {
-    int op;
-    while (1) {
-        printf("Enter the string: ");
-        scanf("%s", str);
-        i = 0;
-        tp = str[i];
-        E();
+    printf("Enter the string: ");
+    scanf("%s", str);
 
-        if (tp == '\0') {
-            printf("String is accepted\n");
-        } else {
-            printf("String is rejected\n");
-        }
+    // Initialize current token
+    tp = str[i];
 
-        printf("Type 1 to exit, any other key to continue: ");
-        scanf("%d", &op);
-        if (op == 1) {
-            exit(0);
-        }
+    E(); // Start parsing
+
+    // If the whole string is consumed successfully
+    if (tp == '\0') {
+        printf("Valid string!\n");
+    } else {
+        printf("Invalid string! Unexpected character: '%c'\n", tp);
     }
+
+    return 0;
 }

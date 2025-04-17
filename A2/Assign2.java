@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class Lab2 {
+public class Assign2 {
 
  public static void main(String[] args) {
  try {

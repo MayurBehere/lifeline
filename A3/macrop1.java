@@ -56,15 +56,14 @@ public class macrop1 {
     static List<MNTEntry> mntTable = new ArrayList<>();
     static List<ALAEntry> alaTable = new ArrayList<>();
     static List<MDTEntry> mdtTable = new ArrayList<>();
+    static List<String> expandedCode = new ArrayList<>();
 
     static int mntIndexCounter = 1;
     static int mdtIndexCounter = 1;
     static Map<String, String> currentALA = new HashMap<>();
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter the full path of the input file: ");
-        String filePath = scanner.nextLine();
+        String filePath = "file.txt";
 
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
 
@@ -74,9 +73,7 @@ public class macrop1 {
 
             while ((line = br.readLine()) != null) {
                 line = line.trim();
-                if (line.isEmpty()) {
-                    continue;
-                }
+                if (line.isEmpty()) continue;
 
                 if (line.equalsIgnoreCase("MACRO")) {
                     inMacroDefinition = true;
@@ -118,6 +115,8 @@ public class macrop1 {
                             mdtTable.add(new MDTEntry(mdtIndexCounter++, processedLine));
                         }
                     }
+                } else {
+                    expandedCode.add(line);
                 }
             }
 
@@ -129,21 +128,20 @@ public class macrop1 {
         printMNTTable();
         printALA();
         printMDT();
+        printExpandedCode();
     }
 
     private static String replaceFormals(String line, Map<String, String> alaMapping) {
         for (Map.Entry<String, String> entry : alaMapping.entrySet()) {
             String formalArg = entry.getKey();
             String alaIndex = entry.getValue();
-            System.out.println(alaIndex+formalArg);
             line = line.replaceAll(formalArg, alaIndex);
         }
-       
-        System.out.println("The line is replaced which is "+line);
         return line;
     }
 
     private static void printMNTTable() {
+        System.out.println("\n===== MNT (Macro Name Table) =====");
         System.out.println(String.format("%-10s %-10s %-10s", "MNT Index", "Name", "MDT Index"));
         for (MNTEntry entry : mntTable) {
             System.out.println(entry);
@@ -151,6 +149,7 @@ public class macrop1 {
     }
 
     private static void printALA() {
+        System.out.println("\n===== ALA (Argument List Array) =====");
         System.out.println(String.format("%-10s %-15s %-15s %-10s", "Index", "Formal Arg", "Actual Arg", "Macro Name"));
         for (ALAEntry entry : alaTable) {
             System.out.println(entry);
@@ -158,10 +157,17 @@ public class macrop1 {
     }
 
     private static void printMDT() {
+        System.out.println("\n===== MDT (Macro Definition Table) =====");
         System.out.println(String.format("%-10s %s", "MDT Index", "Instruction"));
         for (MDTEntry entry : mdtTable) {
             System.out.println(entry);
         }
     }
+
+    private static void printExpandedCode() {
+        System.out.println("\n===== Code Without Macro Definitions =====");
+        for (String line : expandedCode) {
+            System.out.println(line);
+        }
+    }
 }
-// IN OUTPUT I WANT MDT MNT ALA AND THE CODE FROM START TO END WITHOUT MACRO

@@ -1,0 +1,40 @@
+Lab 5-
+ lex code.l
+ gcc lex.yy.c -o output -ll
+
+int main() {
+    int x = 10;
+    float y = 20.5;
+    x = x + y;
+    return 0;
+}
+
+======================================
+
+Lab Assignment 7 -
+
+bison -d parser.y       
+flex Assignment_7.l             
+gcc lex.yy.c parser.tab.c -o parser-lfl
+./parser
+
+
+Valid inputs: 
+if(x) { y; }
+while (x) { a; b; }
+do { a; } while(x);
+
+Invalid inputs
+1. if x { y; }
+2. while (x { a; }
+===================================================================
+
+Lab Assignemt 8 -
+
+// run on linux
+// sudo apt install flex bison gcc
+
+bison -d calc.y           # generates calc.tab.c and calc.tab.h
+flex calc.l               # generates lex.yy.c
+gcc lex.yy.c calc.tab.c -o calc -ll 
+./calc                    # run the calculator
